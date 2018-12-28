@@ -98,7 +98,6 @@ class _LotteryCirclePanState extends State<LotteryCirclePan> with SingleTickerPr
   Animation<double> tween;
   AnimationController controller;
   bool _isAnimating = false;
-  List<String>_saved;
 
   @override
   void initState() {
@@ -120,7 +119,7 @@ class _LotteryCirclePanState extends State<LotteryCirclePan> with SingleTickerPr
     //补间动画
     tween = Tween<double>(
       begin: 0.0,
-      end: pi * 2 * 1 + rewardAngle,
+      end: pi * 2 * 3 + rewardAngle,
     ).animate(
       CurvedAnimation(
         parent: controller,
