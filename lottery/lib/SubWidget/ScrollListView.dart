@@ -78,16 +78,10 @@ class ScrollListViewState extends State<ScrollListView> {
       );
     }
     // TODO: implement build
-    return GestureDetector(
-      //拦截手势，使ListView不能拖动滑动
-      //但是貌似不起效果
-      onTap: null,
-      onVerticalDragCancel: null,
-      onVerticalDragDown: null,
-      onVerticalDragEnd: null,
-      onVerticalDragStart: null,
-      onVerticalDragUpdate: null,
+    return IgnorePointer(
+      ignoring: true,
       child: ListView(
+        primary: false,
         scrollDirection: Axis.vertical,
         controller: _scrollController,
         shrinkWrap: true,
@@ -141,5 +135,71 @@ class ScrollListViewState extends State<ScrollListView> {
         }).toList(),
       ),
     );
+    /**
+    return GestureDetector(
+      //拦截手势，使ListView不能拖动滑动
+      //但是貌似不起效果
+      onTap: null,
+      onVerticalDragCancel: null,
+      onVerticalDragDown: null,
+      onVerticalDragEnd: null,
+      onVerticalDragStart: null,
+      onVerticalDragUpdate: null,
+      child: ListView(
+        primary: false,
+        scrollDirection: Axis.vertical,
+        controller: _scrollController,
+        shrinkWrap: true,
+        children: _itemLists.map((ListModel item) {
+          return Container(
+            height: _ITEM_HEIGHT,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 22,
+                  height: 22,
+                  margin: EdgeInsets.only(left: 16,),
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage(
+                      item.userIcon,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 12.0,),
+                  child: Text(
+                    item.desc,
+                    style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            /**
+                child: ListTile(
+                leading: CircleAvatar(
+                backgroundImage: AssetImage(
+                item.userIcon,
+                ),
+                ),
+                title: Text(
+                item.desc,
+                style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
+                ),
+                ),
+                ),
+             */
+          );
+        }).toList(),
+      ),
+    );
+        */
   }
 }
