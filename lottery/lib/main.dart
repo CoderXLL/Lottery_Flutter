@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'SubWidget/LotteryCircle.dart';
+import 'SubWidget/ScrollListView.dart';
+import 'rule.dart';
 
 void main() => runApp(FlutterView());
 
@@ -27,6 +29,9 @@ class FlutterView extends StatelessWidget {
         ),
         body: LotteryView(),
       ),
+      routes: <String, WidgetBuilder>{
+        '/RuleView': (BuildContext context) => RuleView(),
+      },
     );
   }
 }
@@ -153,32 +158,33 @@ class LotteryFirstView extends StatelessWidget {
                     'assets/images/bg_user message@3x.png',
                      fit: BoxFit.fill,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: 22,
-                        height: 22,
-                        margin: EdgeInsets.only(left: 16, top: 5),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage(
-                            'assets/images/userHead@3x.png'
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 12.0, top: 5),
-                        child: Text(
-                          '小叮当抽中了悠悠球',
-                          style: TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: 13,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  ScrollListView(),
+//                  Row(
+//                    mainAxisAlignment: MainAxisAlignment.start,
+//                    children: <Widget>[
+//                      Container(
+//                        width: 22,
+//                        height: 22,
+//                        margin: EdgeInsets.only(left: 16, top: 5),
+//                        child: CircleAvatar(
+//                          backgroundImage: AssetImage(
+//                            'assets/images/userHead@3x.png'
+//                          ),
+//                        ),
+//                      ),
+//                      Container(
+//                        margin: EdgeInsets.only(left: 12.0, top: 5),
+//                        child: Text(
+//                          '小叮当抽中了悠悠球',
+//                          style: TextStyle(
+//                            color: Color(0xFFFFFFFF),
+//                            fontSize: 13,
+//                            fontWeight: FontWeight.normal,
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                  ),
                 ],
               ),
             ),
@@ -192,14 +198,35 @@ class LotteryFirstView extends StatelessWidget {
                     'assets/images/bg_regular@3x.png',
                     fit: BoxFit.fill,
                   ),
-                  Container(
-                    margin: EdgeInsets.only(left: 13),
-                    child: Center(
-                      child: Text(
-                        '游戏规则',
-                        style: TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 13,
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(new PageRouteBuilder(
+                        pageBuilder: (BuildContext context, _, __) {
+                          return RuleView();
+                        },
+                        transitionsBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation,
+                            Widget child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: Offset(1.0, 0),
+                              end: Offset(0, 0),
+                            ).animate(animation),
+                            child: child,
+                          );
+                        },
+                      ));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 13),
+                      child: Center(
+                        child: Text(
+                          '游戏规则',
+                          style: TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     ),

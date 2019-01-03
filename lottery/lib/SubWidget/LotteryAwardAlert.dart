@@ -10,7 +10,7 @@ void showAwardAlert({@required BuildContext context,
 @required LotteryItemModel itemModel}) {
 
   Navigator.of(context, rootNavigator: true).push(
-    LotteryAwardAlert(titleName: itemModel.titleName, popBlock: (){
+    LotteryAwardAlert(itemModel: itemModel, popBlock: (){
       hideAwardAlert(context);
     })
   );
@@ -18,8 +18,8 @@ void showAwardAlert({@required BuildContext context,
 
 class LotteryAwardAlert extends TransitionRoute {
 
-  LotteryAwardAlert({this.titleName, this.popBlock});
-  final String titleName;
+  LotteryAwardAlert({this.itemModel, this.popBlock});
+  final LotteryItemModel itemModel;
   final VoidCallback popBlock;
   OverlayEntry _alertMaskView;
 
@@ -78,7 +78,7 @@ class LotteryAwardAlert extends TransitionRoute {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              '恭喜抽中『' + '$titleName' + '』',
+              '恭喜抽中『' + itemModel.titleName + '』',
               style: TextStyle(
                 color: Color(0xFFFF713F),
                 fontSize: 22,
@@ -97,18 +97,18 @@ class LotteryAwardAlert extends TransitionRoute {
                 ),
               ),
             ),
-            GiftContentView(),
+            GiftContentView(giftImg: 'assets/images/' + itemModel.iconName + '.png',),
             Container(
               margin: EdgeInsets.only(top: 23),
               width: 222,
               height: 45,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(22.5),
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Color(0XFFFF713F),
-                   child: GestureDetector(
-                   onTap: popBlock,
+                child: GestureDetector(
+                  onTap: popBlock,
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: Color(0XFFFF713F),
                     child: Text(
                       '领取奖励',
                       style: TextStyle(
@@ -129,6 +129,8 @@ class LotteryAwardAlert extends TransitionRoute {
 }
 
 class GiftContentView extends StatefulWidget {
+  const GiftContentView({this.giftImg});
+  final String giftImg;
 
   @override
   _GiftContentViewState createState() => new _GiftContentViewState();
@@ -185,11 +187,15 @@ class _GiftContentViewState extends State<GiftContentView> with SingleTickerProv
               ),
             ),
           ),
+//          HeroGiftView(
+//            isAlertStyle: true,
+//            giftImg: widget.giftImg,
+//          ),
           Container(
             margin: EdgeInsets.only(top: 50),
             child: Center(
               child: Image.asset(
-                'assets/images/pic_gft@3x.png',
+                widget.giftImg,
                 fit: BoxFit.fill,
               ),
             ),
@@ -204,5 +210,30 @@ class _GiftContentViewState extends State<GiftContentView> with SingleTickerProv
     // TODO: implement dispose
     controller.dispose();
     super.dispose();
+  }
+}
+
+class HeroGiftView extends StatelessWidget {
+  const HeroGiftView({Key key, this.isAlertStyle, this.giftImg}) : super(key : key);
+  final bool isAlertStyle;
+  final String giftImg;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      margin: isAlertStyle?EdgeInsets.only(top: 50) : EdgeInsets.all(0),
+      width: isAlertStyle?100 : 60,
+      height: isAlertStyle?100 : 60,
+      child: Hero(
+        tag: giftImg,
+        child: Center(
+          child: Image.asset(
+            giftImg,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
   }
 }

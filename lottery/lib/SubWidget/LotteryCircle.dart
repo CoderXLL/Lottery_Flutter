@@ -78,6 +78,10 @@ class _LotteryCirclePanState extends State<LotteryCirclePan> with SingleTickerPr
                   fontWeight: FontWeight.bold,
                 ),
               ),
+//              HeroGiftView(
+//                isAlertStyle: false,
+//                giftImg: 'assets/images/' + itemModel.iconName + '.png',
+//              ),
               Container(
                 width: 60,
                 height: 60,
@@ -98,6 +102,7 @@ class _LotteryCirclePanState extends State<LotteryCirclePan> with SingleTickerPr
   Animation<double> tween;
   AnimationController controller;
   bool _isAnimating = false;
+  var _statusListener;
 
   @override
   void initState() {
@@ -114,8 +119,17 @@ class _LotteryCirclePanState extends State<LotteryCirclePan> with SingleTickerPr
     if (widget.tapClickBlock != null) {
       widget.tapClickBlock();
     }
+    _statusListener = (AnimationStatus status) {
+      print('$status');
+      if (status == AnimationStatus.completed) {
+        _isAnimating = false;
+        showAwardAlert(context: context, itemModel: _lotteryList[rewardIndex]);
+        tween.removeStatusListener(_statusListener);
+      }
+    };
+
     double rewardAngle = pi / 180.0 *
-        (rewardIndex * 1.0 / _lotteryList.length) * 360.0;
+        (270 - (rewardIndex * 1.0 / _lotteryList.length) * 360.0);
     //补间动画
     tween = Tween<double>(
       begin: 0.0,
@@ -135,13 +149,7 @@ class _LotteryCirclePanState extends State<LotteryCirclePan> with SingleTickerPr
 
         });
       })
-      ..addStatusListener(((AnimationStatus status) {
-        print('$status');
-        if (status == AnimationStatus.completed) {
-          _isAnimating = false;
-          showAwardAlert(context: context, itemModel: _lotteryList[rewardIndex]);
-        }
-      }));
+      ..addStatusListener(_statusListener);
     controller.reset();
     controller.forward();
     _isAnimating = true;

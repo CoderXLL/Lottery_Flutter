@@ -61,6 +61,7 @@ flutter:
     - assets/images/pic_sel@3x.png
     - assets/images/pic_gft@3x.png
     - assets/images/pic_light@3x.png
+    - assets/images/pic_rule@3x.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
