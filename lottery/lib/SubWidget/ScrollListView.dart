@@ -47,18 +47,25 @@ class ScrollListViewState extends State<ScrollListView> {
         desc: '小叮当抽中了悠悠球5',
       ),
     ];
-    _scrollController = ScrollController();
+    _scrollController = ScrollController(initialScrollOffset: 0);
     Timer.periodic(const Duration(seconds: 3), (Timer timer){
-      setState(() {
-        if (_currentIndex == -1) {
-          _currentIndex = 1;
-        } else {
-          _currentIndex ++;
-          if (_currentIndex >= _itemLists.length) {
-            _currentIndex = 0;
-          }
+      if (_currentIndex == -1) {
+        _currentIndex = 1;
+      } else {
+        _currentIndex ++;
+        if (_currentIndex >= _itemLists.length) {
+          _currentIndex = 0;
         }
-      });
+      }
+      if (_currentIndex > 0) {
+        _scrollController.animateTo(
+            _currentIndex * _ITEM_HEIGHT,
+            duration: Duration(seconds: 1),
+            curve: Curves.ease
+        );
+      } else if (_currentIndex == 0) {
+        _scrollController.jumpTo(0);
+      }
     });
   }
 
@@ -70,13 +77,6 @@ class ScrollListViewState extends State<ScrollListView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_currentIndex >= 0) {
-      _scrollController.animateTo(
-          _currentIndex * _ITEM_HEIGHT,
-          duration: Duration(seconds: 1),
-          curve: Curves.ease
-      );
-    }
     // TODO: implement build
     return IgnorePointer(
       ignoring: true,
@@ -135,71 +135,5 @@ class ScrollListViewState extends State<ScrollListView> {
         }).toList(),
       ),
     );
-    /**
-    return GestureDetector(
-      //拦截手势，使ListView不能拖动滑动
-      //但是貌似不起效果
-      onTap: null,
-      onVerticalDragCancel: null,
-      onVerticalDragDown: null,
-      onVerticalDragEnd: null,
-      onVerticalDragStart: null,
-      onVerticalDragUpdate: null,
-      child: ListView(
-        primary: false,
-        scrollDirection: Axis.vertical,
-        controller: _scrollController,
-        shrinkWrap: true,
-        children: _itemLists.map((ListModel item) {
-          return Container(
-            height: _ITEM_HEIGHT,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: 22,
-                  height: 22,
-                  margin: EdgeInsets.only(left: 16,),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(
-                      item.userIcon,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 12.0,),
-                  child: Text(
-                    item.desc,
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            /**
-                child: ListTile(
-                leading: CircleAvatar(
-                backgroundImage: AssetImage(
-                item.userIcon,
-                ),
-                ),
-                title: Text(
-                item.desc,
-                style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 13,
-                fontWeight: FontWeight.normal,
-                ),
-                ),
-                ),
-             */
-          );
-        }).toList(),
-      ),
-    );
-        */
   }
 }
